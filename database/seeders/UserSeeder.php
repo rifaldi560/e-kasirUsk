@@ -22,10 +22,10 @@ class UserSeeder extends Seeder
             ]);
         }
 
-        if (!\App\Models\User::where('email', 'kasir@example.com')->exists()) {
+        if (!\App\Models\User::where('email', 'user@gmail.com')->exists()) {
             \App\Models\User::create([
-                'name' => 'Kasir User',
-                'email' => 'kasir@example.com',
+                'name' => ' User',
+                'email' => 'user@gmail.com',
                 'password' => bcrypt('password'),
                 'role' => 'user',
                 'email_verified_at' => now(),

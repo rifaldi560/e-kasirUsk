@@ -15,12 +15,18 @@ class POSController extends Controller
     {
         $categories = Category::all();
         $selectedCategory = $request->get('category_id');
+        $search = $request->get('search');
+
         $products = Product::where('stock', '>', 0)
             ->when($selectedCategory, function ($query) use ($selectedCategory) {
                 return $query->where('category_id', $selectedCategory);
-            })->get();
+            })
+            ->when($search, function ($query) use ($search) {
+                return $query->where('name', 'LIKE', '%' . $search . '%');
+            })
+            ->get();
 
-        return view('user.pos', compact('categories', 'products', 'selectedCategory'));
+        return view('user.pos', compact('categories', 'products', 'selectedCategory', 'search'));
     }
 
     public function checkout(Request $request)

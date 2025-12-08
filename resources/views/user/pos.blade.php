@@ -21,16 +21,41 @@
             <!-- Products Section -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <!-- Category Filter -->
-                    <form method="GET" class="mb-6">
-                        <label for="category_id" class="block text-sm font-medium text-gray-700 mb-2">Filter by Category</label>
-                        <select name="category_id" id="category_id" onchange="this.form.submit()" class="border-gray-300 rounded-md">
-                            <option value="">All Categories</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}" {{ $selectedCategory == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                    </form>
+                    <!-- Search and Filter -->
+                    <div class="flex flex-col md:flex-row gap-4 mb-6">
+                        <!-- Search -->
+                        <div class="flex-1">
+                            <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Search Products</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </div>
+                                <input type="text" id="search" name="search" value="{{ $search }}"
+                                       placeholder="Search by product name..."
+                                       class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                        </div>
+
+                        <!-- Category Filter -->
+                        <div>
+                            <label for="category_id" class="block text-sm font-medium text-gray-700 mb-2">Filter by Category</label>
+                            <select name="category_id" id="category_id" class="border-gray-300 rounded-md">
+                                <option value="">All Categories</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" {{ $selectedCategory == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Filter Button -->
+                        <div class="flex items-end">
+                            <button type="button" onclick="applyFilters()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Apply Filters
+                            </button>
+                        </div>
+                    </div>
 
                     <!-- Products Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -141,5 +166,52 @@
 
         // Initialize cart count on page load
         updateCartCount();
+
+        function applyFilters() {
+            const searchInput = document.getElementById('search');
+            const categorySelect = document.getElementById('category_id');
+
+            // Build URL with parameters
+            const params = new URLSearchParams(window.location.search);
+
+            if (searchInput.value.trim()) {
+                params.set('search', searchInput.value.trim());
+            } else {
+                params.delete('search');
+            }
+
+            if (categorySelect.value) {
+                params.set('category_id', categorySelect.value);
+            } else {
+                params.delete('category_id');
+            }
+
+            // Navigate to the filtered URL
+            window.location.href = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+        }
+
+        // Add enter key support for search
+        document.getElementById('search').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                applyFilters();
+            }
+        });
+
+        // Auto-clear filters when search becomes empty
+        document.getElementById('search').addEventListener('input', function(e) {
+            if (e.target.value.trim() === '') {
+                // Clear search parameter and navigate to base URL
+                const params = new URLSearchParams(window.location.search);
+                params.delete('search');
+
+                // If category is also selected, keep it, otherwise go to clean URL
+                if (document.getElementById('category_id').value) {
+                    params.set('category_id', document.getElementById('category_id').value);
+                }
+
+                const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+                window.location.href = newUrl;
+            }
+        });
     </script>
 </x-app-layout>
