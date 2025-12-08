@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class POSController extends Controller
 {
@@ -67,7 +68,7 @@ class POSController extends Controller
         }
 
         Transaction::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'total_price' => $calculatedTotal,
             'items_json' => json_encode($validatedItems),
             'status' => 'pending',

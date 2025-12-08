@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        if (auth()->user()->role === 'admin') {
+        if (Auth::user()->role === 'admin') {
             return redirect()->route('admin.dashboard');
-        } elseif (auth()->user()->role === 'user') {
+        } elseif (Auth::user()->role === 'user') {
             return redirect()->route('user.pos');
         }
 
