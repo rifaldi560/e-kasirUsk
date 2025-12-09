@@ -5,6 +5,8 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class CartController extends Controller
 {
@@ -43,5 +45,46 @@ class CartController extends Controller
         $product->increment('stock', $request->quantity);
 
         return response()->json(['success' => true, 'new_stock' => $product->stock]);
+    }
+
+    public function printInvoice(Request $request)
+    {
+        $request->validate([
+            'items' => 'required|array|min:1',
+            'total' => 'required|numeric|min:0',
+        ]);
+
+        $items = $request->items;
+        $total = $request->total;
+        $user = auth()->user();
+
+        // Validate items
+        $validatedItems = [];
+        foreach ($items as $item) {
+            $product = Product::find($item['id']);
+            if (!$product) {
+                return back()->withErrors('Invalid product: ' . $item['name']);
+            }
+
+            $validatedItems[] = [
+                'id' => $item['id'],
+                'name' => $item['name'],
+                'price' => $item['price'],
+                'quantity' => $item['quantity'],
+                'subtotal' => $item['price'] * $item['quantity'],
+            ];
+        }
+
+        // Generate PDF
+        $options = new Options();
+        $options->set('defaultFont', 'Arial');
+        $dompdf = new Dompdf($options);
+
+        $html = view('user.invoice', compact('validatedItems', 'total', 'user'))->render();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        return $dompdf->stream('invoice.pdf', ['Attachment' => false]);
     }
 }

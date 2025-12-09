@@ -19,12 +19,12 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Products Section -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+            <div class="card-responsive">
+                <div class="p-4 sm:p-6 text-gray-900">
                     <!-- Search and Filter -->
-                    <div class="flex flex-col md:flex-row gap-4 mb-6">
+                    {{-- <div class="flex flex-col md:flex-row gap-4 mb-6"> --}}
                         <!-- Search -->
-                        <div class="flex-1">
+                        {{-- <div class="flex-1">
                             <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Search Products</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -36,10 +36,10 @@
                                        placeholder="Search by product name..."
                                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
                             </div>
-                        </div>
+                        </div> --}}
 
                         <!-- Category Filter -->
-                        <div>
+                        {{-- <div>
                             <label for="category_id" class="block text-sm font-medium text-gray-700 mb-2">Filter by Category</label>
                             <select name="category_id" id="category_id" class="border-gray-300 rounded-md">
                                 <option value="">All Categories</option>
@@ -47,15 +47,15 @@
                                     <option value="{{ $category->id }}" {{ $selectedCategory == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> --}}
 
                         <!-- Filter Button -->
-                        <div class="flex items-end">
+                        {{-- <div class="flex items-end">
                             <button type="button" onclick="applyFilters()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                 Apply Filters
                             </button>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <!-- Products Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

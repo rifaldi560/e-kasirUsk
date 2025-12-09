@@ -1,3 +1,70 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+ * Responsive and Flexible Card Component Classes
+ *
+ * Usage:
+ *   .card-responsive     - Main responsive card with adaptive shadows, borders, and rounded corners
+ *   .card-glass          - Glass morphism effect card with backdrop blur
+ *   .card-minimal        - Minimal card with subtle styling
+ *   .container-responsive - Responsive container with adaptive padding and max-widths
+ *   .grid-responsive     - Responsive grid that adapts from 1 to 6 columns based on screen size
+ *   .text-responsive     - Responsive text scaling (sm/base/lg)
+ *   .text-responsive-sm  - Small responsive text
+ *   .text-responsive-lg  - Large responsive text
+ *
+ * Replace: bg-white overflow-hidden shadow-sm sm:rounded-lg
+ * With:    card-responsive
+ */
+@layer components {
+    .card-responsive {
+        @apply bg-white overflow-hidden transition-all duration-300 ease-in-out;
+
+        /* Responsive rounded corners */
+        @apply rounded-none sm:rounded-md md:rounded-lg lg:rounded-xl xl:rounded-2xl;
+
+        /* Adaptive shadows */
+        @apply shadow-none sm:shadow-sm md:shadow-md lg:shadow-lg xl:shadow-xl;
+
+        /* Responsive borders */
+        @apply border-0 sm:border sm:border-gray-100 md:border-gray-200;
+
+        /* Hover effects */
+        @apply hover:shadow-lg sm:hover:shadow-xl md:hover:shadow-2xl transition-shadow duration-300;
+    }
+
+    /* Alternative card variants */
+    .card-glass {
+        @apply bg-white/90 backdrop-blur-sm border border-white/20 rounded-none sm:rounded-md md:rounded-lg lg:rounded-xl xl:rounded-2xl shadow-none sm:shadow-sm md:shadow-md lg:shadow-lg xl:shadow-xl transition-all duration-300;
+    }
+
+    .card-minimal {
+        @apply bg-white border border-gray-100 rounded-none sm:rounded-md transition-all duration-200 shadow-none hover:shadow-sm;
+    }
+
+    /* Responsive container utilities */
+    .container-responsive {
+        @apply max-w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8;
+    }
+
+    /* Flexible grid utilities */
+    .grid-responsive {
+        @apply grid grid-cols-1 gap-4 sm:gap-6;
+        @apply sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6;
+    }
+
+    /* Responsive text scaling */
+    .text-responsive {
+        @apply text-sm sm:text-base md:text-lg;
+    }
+
+    .text-responsive-sm {
+        @apply text-xs sm:text-sm md:text-base;
+    }
+
+    .text-responsive-lg {
+        @apply text-base sm:text-lg md:text-xl lg:text-2xl;
+    }
+}

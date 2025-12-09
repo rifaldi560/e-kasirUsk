@@ -12,9 +12,28 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                    @if(Auth::check() && Auth::user()->role === 'admin')
+                        <!-- Admin Navigation Links -->
+                        @if(config('fitur.admin.products', true))
+                        <x-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.*')">
+                            {{ __('Products') }}
+                        </x-nav-link>
+                        @endif
+                        @if(config('fitur.admin.categories', true))
+                        <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
+                            {{ __('Categories') }}
+                        </x-nav-link>
+                        @endif
+                        {{-- @if(config('fitur.admin.transactions', true))
+                        <x-nav-link :href="route('admin.transactions.index')" :active="request()->routeIs('admin.transactions.*')">
+                            {{ __('Transactions') }}
+                        </x-nav-link>
+                        @endif --}}
+                    @else
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -67,9 +86,28 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            @if(Auth::check() && Auth::user()->role === 'admin')
+                <!-- Admin Responsive Navigation Links -->
+                @if(config('fitur.admin.products', true))
+                <x-responsive-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.*')">
+                    {{ __('Products') }}
+                </x-responsive-nav-link>
+                @endif
+                @if(config('fitur.admin.categories', true))
+                <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
+                    {{ __('Categories') }}
+                </x-responsive-nav-link>
+                @endif
+                @if(config('fitur.admin.transactions', true))
+                <x-responsive-nav-link :href="route('admin.transactions.index')" :active="request()->routeIs('admin.transactions.*')">
+                    {{ __('Transactions') }}
+                </x-responsive-nav-link>
+                @endif
+            @else
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    {{ __('Dashboard') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
