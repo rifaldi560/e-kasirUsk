@@ -26,7 +26,7 @@
                         @endif
                         @if(config('fitur.admin.transactions', true))
                         <x-nav-link :href="route('admin.transactions.index')" :active="request()->routeIs('admin.transactions.*')">
-                            {{ __('Transactions') }}
+                            {{ __('View Report') }}
                         </x-nav-link>
                         @endif
                     @else

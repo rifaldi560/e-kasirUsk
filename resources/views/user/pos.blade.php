@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Store') }}
+                {{ __('Store Online') }}
             </h2>
             <div class="flex space-x-2">
                 <a href="{{ route('user.cart') }}" id="cart-button" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition-all duration-300 relative">

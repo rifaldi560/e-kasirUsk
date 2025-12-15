@@ -33,6 +33,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     if (config('fitur.admin.transactions', true)) {
         Route::get('transactions', [\App\Http\Controllers\Admin\TransactionController::class, 'index'])->name('transactions.index');
         Route::post('transactions/{transaction}/complete', [\App\Http\Controllers\Admin\TransactionController::class, 'complete'])->name('transactions.complete');
+        Route::delete('transactions/{transaction}', [\App\Http\Controllers\Admin\TransactionController::class, 'deleteTransaction'])->name('transactions.delete');
+        Route::post('transactions/delete-user-history', [\App\Http\Controllers\Admin\TransactionController::class, 'deleteUserHistory'])->name('transactions.delete-user-history');
     }
 
     // Reports - conditionally register based on config
