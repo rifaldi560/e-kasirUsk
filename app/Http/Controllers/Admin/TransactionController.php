@@ -33,9 +33,27 @@ class TransactionController extends Controller
         return back()->with('success', 'Transaction marked as completed.');
     }
 
-    public function reports()
+    public function reports(Request $request)
     {
-        $transactions = Transaction::with('user')->where('status', 'completed')->orderBy('updated_at', 'desc')->get();
+        $query = Transaction::with('user')->where('status', 'completed');
+
+        // Apply date filters
+        if ($request->filled('date_from')) {
+            $query->whereDate('updated_at', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('updated_at', '<=', $request->date_to);
+        }
+
+        // If no filters applied, default to current month
+        if (!$request->filled('date_from') && !$request->filled('date_to')) {
+            $query->whereMonth('updated_at', now()->month)
+                  ->whereYear('updated_at', now()->year);
+        }
+
+        $transactions = $query->orderBy('updated_at', 'desc')->get();
+
         return view('admin.transactions.reports', compact('transactions'));
     }
 }

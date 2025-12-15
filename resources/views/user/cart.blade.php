@@ -137,9 +137,21 @@
         }
 
         function removeFromCart(index) {
+            const itemName = cart[index].name;
             cart.splice(index, 1);
             saveCart();
             updateCartDisplay();
+
+            // Show success notification
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: `"${itemName}" berhasil dihapus dari cart kamu`,
+                timer: 2000,
+                showConfirmButton: false,
+                position: 'top-end',
+                toast: true
+            });
         }
 
         function saveCart() {

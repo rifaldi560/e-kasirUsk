@@ -24,14 +24,17 @@
                             {{ __('Categories') }}
                         </x-nav-link>
                         @endif
-                        {{-- @if(config('fitur.admin.transactions', true))
+                        @if(config('fitur.admin.transactions', true))
                         <x-nav-link :href="route('admin.transactions.index')" :active="request()->routeIs('admin.transactions.*')">
                             {{ __('Transactions') }}
                         </x-nav-link>
-                        @endif --}}
+                        @endif
                     @else
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                             {{ __('Dashboard') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('user.history')" :active="request()->routeIs('user.history')">
+                            {{ __('Riwayat Transaksi') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -106,6 +109,9 @@
             @else
                 <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                     {{ __('Dashboard') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('user.history')" :active="request()->routeIs('user.history')">
+                    {{ __('Riwayat Transaksi') }}
                 </x-responsive-nav-link>
             @endif
         </div>

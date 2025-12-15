@@ -17,6 +17,9 @@ return new class extends Migration
             $table->decimal('total_price', 10, 2);
             $table->json('items_json');
             $table->enum('status', ['pending', 'completed'])->default('pending');
+            $table->string('payment_method')->nullable();
+            $table->string('queue_number')->nullable();
+            $table->date('queue_date')->nullable();
             $table->timestamps();
         });
     }

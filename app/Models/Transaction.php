@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
-    protected $fillable = ['user_id', 'total_price', 'items_json', 'status'];
+    protected $fillable = ['user_id', 'total_price', 'items_json', 'status', 'payment_method', 'queue_number', 'queue_date'];
 
     protected $casts = [
         'total_price' => 'decimal:2',

@@ -51,6 +51,14 @@ Route::middleware(['auth', 'user'])->prefix('user')->name('user.')->group(functi
     Route::get('/pos', [App\Http\Controllers\User\POSController::class, 'index'])->name('pos');
     Route::post('/checkout', [App\Http\Controllers\User\POSController::class, 'checkout'])->name('checkout');
 
+    // Payment
+    Route::get('/payment', [App\Http\Controllers\User\POSController::class, 'payment'])->name('payment');
+    Route::post('/payment/process', [App\Http\Controllers\User\POSController::class, 'processPayment'])->name('payment.process');
+
+    // Receipt
+    Route::get('/receipt/{transaction}', [App\Http\Controllers\User\POSController::class, 'receipt'])->name('receipt');
+    Route::get('/receipt/{transaction}/pdf', [App\Http\Controllers\User\POSController::class, 'downloadPdf'])->name('receipt.pdf');
+
     // Cart
     Route::get('/cart', [App\Http\Controllers\User\CartController::class, 'index'])->name('cart');
     Route::post('/cart/decrease-stock', [App\Http\Controllers\User\CartController::class, 'decreaseStock'])->name('cart.decrease-stock');

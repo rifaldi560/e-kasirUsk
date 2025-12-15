@@ -8,6 +8,8 @@ use App\Models\Product;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class POSController extends Controller
 {
@@ -38,6 +40,41 @@ class POSController extends Controller
 
         $items = $request->items;
         $total = $request->total;
+
+        // Store cart data in session for payment method selection
+        session([
+            'checkout_items' => $items,
+            'checkout_total' => $total
+        ]);
+
+        return redirect()->route('user.payment');
+    }
+
+    public function payment()
+    {
+        // Retrieve cart data from session
+        $items = session('checkout_items');
+        $total = session('checkout_total');
+
+        if (!$items || !$total) {
+            return redirect()->route('user.cart')->withErrors('No items in cart.');
+        }
+
+        return view('user.payment', compact('items', 'total'));
+    }
+
+    public function processPayment(Request $request)
+    {
+        $request->validate([
+            'payment_method' => 'required|in:cash,card,qris,transfer',
+        ]);
+
+        $items = session('checkout_items');
+        $total = session('checkout_total');
+
+        if (!$items || !$total) {
+            return redirect()->route('user.cart')->withErrors('No items in cart.');
+        }
 
         // Verify items and calculate total
         $calculatedTotal = 0;
@@ -73,13 +110,74 @@ class POSController extends Controller
             return back()->withErrors('Total mismatch.');
         }
 
-        Transaction::create([
+        // Generate queue number (resets daily)
+        $today = now()->toDateString();
+        $lastTransaction = Transaction::where('queue_date', $today)
+            ->whereNotNull('queue_number')
+            ->orderBy('queue_number', 'desc')
+            ->first();
+
+        $queueNumber = $lastTransaction ? intval($lastTransaction->queue_number) + 1 : 1;
+        $formattedQueueNumber = str_pad($queueNumber, 3, '0', STR_PAD_LEFT);
+
+        $transaction = Transaction::create([
             'user_id' => Auth::id(),
             'total_price' => $calculatedTotal,
             'items_json' => json_encode($validatedItems),
-            'status' => 'pending',
+            'status' => 'completed',
+            'payment_method' => $request->payment_method,
+            'queue_number' => $formattedQueueNumber,
+            'queue_date' => $today,
         ]);
 
-        return redirect()->route('user.history')->with('success', 'Order placed successfully.');
+        // Clear session data
+        session()->forget(['checkout_items', 'checkout_total']);
+
+        return redirect()->route('user.receipt', $transaction)->with('auto_download_pdf', true);
+    }
+
+    public function receipt(Transaction $transaction)
+    {
+        // Ensure user can only view their own receipts
+        if ($transaction->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        return view('user.receipt', compact('transaction'));
+    }
+
+    public function downloadPdf(Transaction $transaction)
+    {
+        // Ensure user can only download their own receipts
+        if ($transaction->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        // Configure DomPDF options
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
+        $options->set('defaultFont', 'Arial');
+        $options->set('isHtml5ParserEnabled', true);
+
+        // Initialize DomPDF
+        $dompdf = new Dompdf($options);
+
+        // Load HTML content
+        $html = view('user.receipt-pdf', compact('transaction'))->render();
+
+        // Load HTML to DomPDF
+        $dompdf->loadHtml($html);
+
+        // Set paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render PDF
+        $dompdf->render();
+
+        // Generate filename
+        $filename = 'struk-' . $transaction->id . '-' . now()->format('Y-m-d-H-i-s') . '.pdf';
+
+        // Return PDF as download
+        return $dompdf->stream($filename, ['Attachment' => true]);
     }
 }
