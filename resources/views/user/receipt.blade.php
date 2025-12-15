@@ -5,16 +5,16 @@
                 {{ __('Invoice Pembayaran') }}
             </h2>
             <div class="flex space-x-2">
-                <a href="{{ route('user.pos') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                {{-- <a href="{{ route('user.pos') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Kembali ke POS
-                </a>
+                </a> --}}
                 <a href="{{ route('user.receipt.pdf', $transaction) }}" target="_blank" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     Download PDF
                 </a>
                 {{-- <button onclick="window.print()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                     Print Invoice
-                </button> --}}
-            </div>
+                </button>
+            </div> --}}
         </div>
     </x-slot>
 
@@ -26,11 +26,11 @@
                 </div>
             @endif
 
-            @if(session('auto_download_pdf'))
+            {{-- @if(session('auto_download_pdf'))
                 <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-6">
                     PDF invoice sedang diunduh secara otomatis...
                 </div>
-            @endif
+            @endif --}}
 
             <!-- Invoice -->
             <div class="bg-white shadow-lg rounded-lg overflow-hidden">
@@ -189,7 +189,7 @@
         }
     </style>
 
-    <script>
+    {{-- <script>
         // Auto-refresh queue number (in case of system updates)
         setInterval(function() {
             // You could add AJAX call here to check for queue updates
@@ -214,5 +214,5 @@
             document.body.removeChild(link);
         });
         @endif
-    </script>
+    </script> --}}
 </x-app-layout>

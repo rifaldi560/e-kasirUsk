@@ -8,9 +8,9 @@
                 <a href="{{ route('user.pos') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center">
                     Back to POS
                 </a>
-                <a href="{{ route('user.history') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded text-center">
+                {{-- <a href="{{ route('user.history') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded text-center">
                     View History
-                </a>
+                </a> --}}
             </div>
         </div>
     </x-slot>
